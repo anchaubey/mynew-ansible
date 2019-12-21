@@ -1,0 +1,55 @@
+---
+- hosts: node1
+  become: yes
+  vars: 
+    webfile: /etc/ansible/files/index.html
+    webdestination: /var/www/html/index.html
+  tasks:
+    - debug: 
+        msg: "web package file is {{webfile}} copied on the destination to {{webdestination}}"
+    - name: Installing pip
+      apt:
+         name: python3-pip
+         state: present
+
+    - name: Installing HTTPD/APache on the ubuntu server
+      apt:
+        name: apache2
+        state: present
+    - name: Copy html file
+      copy:
+         src: "{{webfile}}"
+         dest: "{{webdestination}}"
+         owner: ubuntu
+         group: ubuntu
+         mode: 0644
+    - name: Starting the apache2 service
+      service:
+        name: apache2
+        state: restarted
+        enabled: yes
+
+
+    - name: Installing Mysql server
+      apt:
+        name: mysql-server
+        state: present
+    - name: Install mysql-python
+      apt:
+        name: python-mysqldb
+        state: present
+    - name: Starting the mysql-server service
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+    - name: Create a new database with name 'Accounts'
+      mysql_db:
+        name: accounts
+        state: present
+    - name: Setup admin user
+      mysql_user:
+        name: admin
+        password: admin123
+        priv: '*.*:ALL'
+        state: present

@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - debug:
+        msg: "OS family for {{ansible_fqdn}} is {{ansible_os_family}}"
+    - debug:
+        msg: "IP info {{ansible_all_ipv4_addresses}}"
+    - debug:
+        msg: "First IP {{ansible_all_ipv4_addresses[0]}}"
+
+

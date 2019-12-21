@@ -1,0 +1,19 @@
+---
+- hosts: amazonlinuxgroup
+  become: yes
+  gather_facts: true
+  tasks:
+    - debug:
+        msg: "Value of USERNAME is {{USERNAME}}"
+    - debug:
+        msg: "Value of GROUPNAME is {{GROUPNAME}}"
+    - name: Add User
+      user: 
+        name: "{{USERNAME}}"
+        state: present
+        shell: /bin/bash
+    - name: Creating Group
+      group:
+        name: "{{GROUPNAME}}"
+        state: present
+
