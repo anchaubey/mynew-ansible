@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Print output of /etc/motd
+      command: /usr/bin/whoami
+      register: USR
+      
+
+
+    - debug:
+        msg: "The User currently logged in is {{USR.stdout}}"
+  
+    - file:
+        path: /etc/motd
+        owner: "{{USR.stdout}}"
+
+    - stat: 
+        path: /etc/motd
+      register: motd_stat
+
+    - debug:
+        msg: "{{motd_stat}}"
