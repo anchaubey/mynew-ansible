@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Install ntp package on Ubuntu
+      apt:
+        name: ntp
+        state: present
+      when: ansible_os_family == "Debian"
+    - name: Install ntp package on Redhat
+      yum:
+        name: ntp
+        state: present
+      when: ansible_os_family == "RedHat"
+    
+    - name: Start and enable ntp service on Ubuntu
+      service:
+        name: ntp
+        state: started
+        enabled: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Start and enable ntp service on Redhat
+      service:
+        name: ntpd
+        state: started
+        enabled: yes
+      when: ansible_os_family == "RedHat"
