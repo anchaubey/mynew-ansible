@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: true
+  gather_facts: true
+  tasks:
+    - name: Print output of /etc/motd
+      command: cat /etc/motd
+      register: banner
+      
+
+
+    - debug:
+        msg: "Content of motd file is {{banner.stdout}}"
